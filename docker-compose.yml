@@ -35,7 +35,7 @@ services:
         build:
             context: .
             dockerfile: ./dockerfiles/node_dockerfile
-        #Got annoying error if 2nd node server was also set to 3000:3000, will look for better fix
+        #Got annoying "Bind for 0.0.0.0:3000 failed: port is already allocated" error if 2nd node server was also set to 3000:3000, will look for better fix
         ports:
             - "3001:3000"
         networks:
