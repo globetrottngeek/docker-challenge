@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+    nginx:
+        container_name: nginx
+        build:
+            context: .
+            dockerfile: ./dockerfiles/nigx_dockerfile
+        #links no longer needed in this version of docker
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - nodeapp-network
+
+    mongo:
+        container_name: mongodb
+        image: mongo
+        networks:
+            - nodeapp-network
+            
+#wonder if a loop can be created to set # of nodeapps to be built and linked? less copy/paste hack job.           
+    node1:
+        container_name: nodeapp1
+        build:
+            context: .
+            dockerfile: ./dockerfiles/node_dockerfile
+        ports:
+            - "3000:3000"
+        networks:
+            - nodeapp-network
+
+    node2:
+        container_name: nodeapp2
+        build:
+            context: .
+            dockerfile: ./dockerfiles/node_dockerfile
+        #Got annoying error if 2nd node server was also set to 3000:3000, will look for better fix
+        ports:
+            - "3001:3000"
+        networks:
+            - nodeapp-network            
+            
+networks:
+    nodeapp-network:
+        driver: bridge

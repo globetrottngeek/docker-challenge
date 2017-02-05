@@ -1,0 +1,31 @@
+#Node dockerfile
+
+FROM node
+
+MAINTAINER Joseph Allen
+
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# Set all my ENV. S3 was setup using AWS IAM, a group and user was created to allow read/write for the node servers
+ENV NODE_ENV 'production nodemon'
+ENV MONGOHQ_URL mongodb://mongodb/noobjs_dev
+ENV AWS_S3_KEY AKIAIAZUMRTNBMYAFBBQ
+ENV AWS_S3_SECRET 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
+ENV AWS_S3_BUCKET globetrottngeek.s3.amazonaws.com
+
+# Install app dependencies
+COPY package.json /usr/src/app/
+RUN npm install
+#RUN npm install express
+#RUN npm install imagemagick
+#RUN npm install aws-sdk
+#RUN npm install s3-uploader
+
+# Bundle app source
+COPY . /usr/src/app
+
+EXPOSE 3000
+
+CMD [ "npm", "start" ]
